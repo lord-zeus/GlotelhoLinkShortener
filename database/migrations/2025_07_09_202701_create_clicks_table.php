@@ -13,6 +13,16 @@ return new class extends Migration
     {
         Schema::create('clicks', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('url_id')->constrained()->cascadeOnDelete();
+            $table->ipAddress('visitor_ip')->nullable();
+            $table->string('user_agent')->nullable();
+            $table->string('referer')->nullable();
+            $table->string('country')->nullable();
+            $table->string('city')->nullable();
+            $table->text('device_type')->nullable();
+            $table->text('os')->nullable();
+            $table->text('browser')->nullable();
+            $table->text('screen_resolution')->nullable();
             $table->timestamps();
         });
     }

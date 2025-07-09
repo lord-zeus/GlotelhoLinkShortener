@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('urls', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->text('original_url');
+            $table->string('short_code')->unique();
+            $table->unsignedInteger('count')->default(0);
+            $table->timestamp('expires_at')->nullable();
             $table->timestamps();
         });
     }
