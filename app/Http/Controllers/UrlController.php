@@ -4,14 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Url\StoreRequest;
 use App\Models\Url;
+use App\Traits\UrlTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class UrlController extends Controller
 {
+    use UrlTrait;
     public function create()
     {
         return Inertia::render('Urls/Create');
@@ -19,18 +22,10 @@ class UrlController extends Controller
 
     public function store(StoreRequest $request)
     {
-        $shortCode = $request->custom_code ?? $this->generateUniqueShortCode();
-
-        $shortUrl = Url::create([
-            'original_url' => $request->original_url,
-            'short_code' => $shortCode,
-            'expires_at' => $request->expires_at,
-            'user_id' => $request->user()?->id
-        ]);
+        $this->shortenUrl($request);
 
         return back()->with([
             'message' => 'URL created successfully!',
-            'short_url' => url('/'.$shortCode)
         ]);
     }
 
@@ -69,14 +64,6 @@ class UrlController extends Controller
         ]);
     }
 
-    private function generateUniqueShortCode($length = 6): string
-    {
-        do {
-            $code = Str::random($length);
-        } while (Url::where('short_code', $code)->exists());
-
-        return $code;
-    }
 
     public function show(Request $request, $id)
     {

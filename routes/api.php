@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UrlController;
@@ -26,7 +27,7 @@ Route::prefix('auth')->group(function () {
         ->middleware('guest')
         ->name('api.register');
 
-    Route::post('/login', [AuthenticatedSessionController::class, 'store'])
+    Route::post('/login', [AuthController::class, 'login'])
         ->middleware('guest')
         ->name('api.login');
 
@@ -35,9 +36,11 @@ Route::prefix('auth')->group(function () {
         ->name('api.logout');
 });
 
+Route::group(['middleware' => ['auth:sanctum']], function () {
 
-Route::post('/urls', [UrlController::class, 'store']);
+    Route::post('/urls', [UrlController::class, 'shortenUrl']);
+});
+
+
 Route::get('/urls/{id}/analytics', [UrlController::class, 'show']);
-
-
 

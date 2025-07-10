@@ -112,6 +112,16 @@ return [
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
 
+        'testing' => [
+            'driver' => env('DB_TEST_CONNECTION', 'mysql'),
+            'host' => env('DB_TEST_HOST', '127.0.0.1'),
+            'port' => env('DB_TEST_PORT', '3306'),
+            'database' => env('DB_TEST_DATABASE', 'laravel_testing'),
+            'username' => env('DB_TEST_USERNAME', 'sail'),
+            'password' => env('DB_TEST_PASSWORD', 'password'),
+            // ... same other config as mysql
+        ],
+
     ],
 
     /*
