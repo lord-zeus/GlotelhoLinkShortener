@@ -35,12 +35,9 @@ Route::prefix('auth')->group(function () {
         ->name('api.logout');
 });
 
-Route::group(['middleware' => ['auth:sanctum']], function () {
 
-    Route::get('/urls', [UrlController::class, 'userUrls']);
-
-});
 Route::post('/urls', [UrlController::class, 'store']);
+Route::get('/urls/{id}/analytics', [UrlController::class, 'show']);
 
 
 

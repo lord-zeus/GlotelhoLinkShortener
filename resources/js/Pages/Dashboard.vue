@@ -51,7 +51,7 @@ const showStats = (url) => {
     const stats = `
     Short URL: ${getShortUrl(url.short_code)}
     Original URL: ${url.original_url}
-    Clicks: ${url.clicks}
+    Clicks: ${url.count}
     Created: ${formatDate(url.created_at)}
     ${url.expires_at ? `Expires: ${formatDate(url.expires_at)}` : ''}
   `;
@@ -127,14 +127,6 @@ const prevPage = () => {
                                         Create New
                                     </a>
                                 </li>
-                                <li>
-                                    <a href="/analytics" class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
-                                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                                        </svg>
-                                        Analytics
-                                    </a>
-                                </li>
                             </ul>
                         </div>
                     </div>
@@ -192,18 +184,18 @@ const prevPage = () => {
                                                 {{ url.original_url }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                {{ url.clicks }}
+                                                {{ url.count }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 {{ formatDate(url.created_at) }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                                <button
-                                                    @click="showStats(url)"
+                                                <a
+                                                    :href="'/urls/' + url.id + '/analytics'"
                                                     class="mr-3 text-indigo-600 hover:text-indigo-900"
                                                 >
                                                     Stats
-                                                </button>
+                                                </a>
                                                 <button
                                                     @click="copyUrl(url)"
                                                     class="mr-3 text-indigo-600 hover:text-indigo-900"

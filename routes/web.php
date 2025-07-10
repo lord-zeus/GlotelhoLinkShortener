@@ -42,10 +42,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/urls', [UrlController::class, 'store'])->name('urls.store');
 });
 
-// Analytics page
-Route::get('/analytics', function () {
-    return inertia('Analytics');
-})->name('analytics');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -55,5 +51,9 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 Route::get('/{shortCode}', [UrlController::class, 'redirect']);
-
+Route::get('/urls/{id}/analytics', function ($id) {
+    return inertia('Urls/Analytics', [
+        'id' => $id  // Pass the ID to the frontend component
+    ]);
+})->name('analytics');
 

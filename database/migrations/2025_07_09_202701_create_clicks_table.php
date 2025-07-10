@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('referer')->nullable();
             $table->string('country')->nullable();
             $table->string('city')->nullable();
-            $table->text('device_type')->nullable();
+            $table->text('device')->nullable();
             $table->text('os')->nullable();
             $table->text('browser')->nullable();
             $table->text('screen_resolution')->nullable();
