@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UrlController;
@@ -19,4 +21,26 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/urls', [UrlController::class, ]);
+Route::prefix('auth')->group(function () {
+    Route::post('/register', [RegisteredUserController::class, 'store'])
+        ->middleware('guest')
+        ->name('api.register');
+
+    Route::post('/login', [AuthenticatedSessionController::class, 'store'])
+        ->middleware('guest')
+        ->name('api.login');
+
+    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+        ->middleware('auth:sanctum')
+        ->name('api.logout');
+});
+
+Route::group(['middleware' => ['auth:sanctum']], function () {
+
+    Route::get('/urls', [UrlController::class, 'userUrls']);
+
+});
+Route::post('/urls', [UrlController::class, 'store']);
+
+
+

@@ -22,10 +22,8 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => 'required|exists:users,id',
             'original_url' => 'required|url|max:2048',
-            'custom_code' => 'nullable|alpha_dash|max:32|unique:short_urls,short_code',
-            'short_code' => 'required|string|max:20|unique:urls,short_code',
+            'custom_code' => 'nullable|alpha_dash|max:32|unique:urls,short_code',
             'expires_at' => 'nullable|date'
         ];
     }

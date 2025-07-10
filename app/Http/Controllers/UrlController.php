@@ -6,12 +6,13 @@ use App\Http\Requests\Url\StoreRequest;
 use App\Models\Url;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
 
 class UrlController extends Controller
 {
-    public function index()
+    public function create()
     {
-        return 'OK';
+        return Inertia::render('Urls/Create');
     }
 
     public function store(StoreRequest $request)
@@ -19,19 +20,16 @@ class UrlController extends Controller
         $shortCode = $request->custom_code ?? $this->generateUniqueShortCode();
 
         $shortUrl = Url::create([
-            'original_url' => $request->url,
+            'original_url' => $request->original_url,
             'short_code' => $shortCode,
             'expires_at' => $request->expires_at,
             'user_id' => $request->user()?->id
         ]);
 
-        return response()->json([
-            'short_url' => url("/$shortCode"),
-            'original_url' => $shortUrl->original_url,
-            'short_code' => $shortCode,
-            'expires_at' => $shortUrl->expires_at,
-            // Bonus: QR code generation
-        ], 201);
+        return back()->with([
+            'message' => 'URL created successfully!',
+            'short_url' => url('/'.$shortCode)
+        ]);
     }
 
     public function redirect($shortCode)
@@ -61,11 +59,15 @@ class UrlController extends Controller
 
     public function userUrls(Request $request)
     {
+        $page = $request->query('page', 1); // Get page number from query parameter, default to 1
+
         $urls = $request->user()->urls()
             ->latest()
-            ->paginate(10);
+            ->paginate(1, ['*'], 'page', $page);
 
-        return response()->json($urls);
+        return Inertia::render('Dashboard', [
+            'urls' => $urls
+        ]);
     }
 
     private function generateUniqueShortCode($length = 6): string
