@@ -55,7 +55,7 @@ cp .env.example .env
 
 ## 2. Start Containers
 ```bash 
-./vendor/bin/sail test
+./vendor/bin/sail up
 
 ```
 

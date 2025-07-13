@@ -173,4 +173,13 @@ class UrlController extends Controller
             ]
         ]);
     }
+
+    private function generateUniqueShortCode($length = 6)
+    {
+        do {
+            $code = Str::random($length);
+        } while (Url::where('short_code', $code)->exists());
+
+        return $code;
+    }
 }
